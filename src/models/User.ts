@@ -6,6 +6,11 @@ const InterviewSchema = new mongoose.Schema({
   score: Number,
   verdict: String,
   feedback: String,
+  transcript: [{
+    role: String, // 'user' or 'assistant'
+    content: String,
+    critique: String // 💡 This is where the AI will put its "inline comment"
+  }],
   skills: { // 👈 Ensure this is here
     technical: Number,
     communication: Number,

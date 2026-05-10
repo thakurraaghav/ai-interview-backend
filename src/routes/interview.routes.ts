@@ -49,12 +49,19 @@ router.post('/chat', async (req, res) => {
 });
 
 router.post('/report', protect, async (req: AuthRequest, res: Response) => {
-  const { history } = req.body;
+  const { history, role } = req.body;
   const userId = req.user?.id;
 
+  // 💡 Security check: Don't waste AI tokens or DB space on empty sessions
+  if (!history || history.length < 3) {
+    return res.status(400).json({ 
+      error: "Session too short. No analysis generated." 
+    });
+  }
+
   try {
-    const report = await generateInterviewReport(history);
-    const reportWithMetadata = { ...report, date: new Date(), id: Date.now().toString() };
+    const report = await generateInterviewReport(history, role);
+    const reportWithMetadata = { ...report, transcript: report.transcript, role: role,  date: new Date(), id: Date.now().toString() };
     await User.findByIdAndUpdate(userId, { $push: { interviews: reportWithMetadata } });
     res.json(report);
   } catch (error) {

@@ -4,33 +4,43 @@ dotenv.config();
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-export const generateInterviewReport = async (history: { role: string; content: string }[]) => {
+export const generateInterviewReport = async (history: { role: string; content: string }[], role: string) => {
   try {
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         {
           role: "system",
-          content: `You are an expert Technical Interview Analyst. 
-          Analyze the provided interview transcript and return a JSON object with scores (0-100) for these 5 categories:
-          1. technical: Accuracy and depth of knowledge.
-          2. communication: Clarity, flow, and jargon usage.
-          3. logic: Problem-solving approach and handling edge cases.
-          4. confidence: Certainty in answers and lack of filler words.
-          5. conciseness: Ability to explain complex ideas without rambling.
-
-          Output Format (JSON only):
+          content: `You are an expert Senior Technical Recruiter specializing in ${role} roles.
+          
+          TASK:
+          1. Analyze the overall performance.
+          2. Critique every user response individually.
+          
+          OUTPUT JSON FORMAT:
           {
-            "score": number (total average),
-            "verdict": "A sharp, one-sentence evaluation.",
-            "feedback": "A detailed paragraph with pros and cons.",
+            "score": number (0-100),
+            "verdict": "One short, punchy sentence.",
+            "feedback": "A detailed paragraph on performance.",
             "skills": {
               "technical": number,
               "communication": number,
               "logic": number,
               "confidence": number,
               "conciseness": number
-            }
-          }`
+            },
+            "transcript": [
+               { 
+                 "role": "assistant" | "user", 
+                 "content": "string", 
+                 "critique": "A short 1-sentence tip or praise. ONLY provide this for 'user' roles. Leave null for 'assistant'." 
+               }
+            ]
+          }
+
+          INSTRUCTIONS FOR CRITIQUE:
+          - If the user was vague, suggest being more specific.
+          - If they used filler words, point it out.
+          - If they gave a great technical answer, praise the specific concept they mentioned.`
         },
         {
           role: "user",
