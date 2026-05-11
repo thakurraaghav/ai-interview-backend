@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    // 2. Use the specific schema here instead of generic Object
+    resumeText: {type: String, default: ""},
     interviews: [InterviewSchema] 
 });
 
