@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import interviewRoutes from './routes/interview.routes.js';
 import mongoose from 'mongoose'; 
 import authRoutes from './routes/auth.routes.js'
+import resumeRoutes from './routes/resume.routes.js'
 
 
 const app = express();
@@ -25,5 +26,6 @@ app.use(express.json());
 // Routes
 app.use('/api/interview', interviewRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/resume', resumeRoutes);
 
 app.listen(port, () => console.log(`🚀 AI Backend running at http://localhost:${port}`));

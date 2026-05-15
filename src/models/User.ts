@@ -21,11 +21,22 @@ const InterviewSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now }
 });
 
+
+const resumeSchema = new mongoose.Schema({
+  id: {type: String, required: true},
+  score: {type: Number, required: true},
+  feedback: {type: String, required: true},
+  role: {type: String, required: true},
+  fileName: {type: String, required: true},
+  date: {type: Date, default: Date.now}
+});
+
 const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    interviews: [InterviewSchema]
+    interviews: [InterviewSchema],
+    resumes: { type: [resumeSchema], default: [] }
 });
 
 export default mongoose.model('User', UserSchema);
