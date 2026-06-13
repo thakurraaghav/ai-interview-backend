@@ -20,8 +20,18 @@ mongoose.connect(process.env.MONGODB_URI!)
 
 app.use(helmet()); 
 app.use(morgan('dev'));
-app.use(cors());
 app.use(express.json());
+app.use(cors({
+    origin: [
+        'https://recruitaifrontend.netlify.app', // ✨ Replace with your actual Netlify production URL
+        'http://localhost:5173',               // Keep this so your local frontend development continues to work
+        'http://localhost:3000'
+    ], 
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-AI-Text'], 
+    exposedHeaders: ['X-AI-Text'], // 🚀 CRITICAL: This allows the browser to read the text response headers in production
+    credentials: true
+}));
 
 
 // Routes
