@@ -8,7 +8,7 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 /**
  * Returns a live stream of audio data from Orpheus
  */
-export const getOrpheusAudioStream = async (text: string, voice: string = 'hannah') => {
+export const getOrpheusAudioBuffer = async (text: string, voice: string = 'hannah'): Promise<Buffer> => {
   try {
     const response = await groq.audio.speech.create({
       model: "canopylabs/orpheus-v1-english",
@@ -17,9 +17,8 @@ export const getOrpheusAudioStream = async (text: string, voice: string = 'hanna
       response_format: "wav",
     });
 
-    // We get the body as a readable stream
-    // This allows us to start sending data immediately
-    return response.body; 
+    const arrayBuffer = await response.arrayBuffer();
+    return Buffer.from(arrayBuffer); 
   } catch (error) {
     console.error("TTS Stream Error:", error);
     throw error;

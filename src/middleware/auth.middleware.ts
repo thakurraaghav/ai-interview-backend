@@ -7,9 +7,8 @@ export interface AuthRequest extends Request {
 }
 
 export const protect = (req: AuthRequest, res: Response, next: NextFunction) => {
-  // 1. Get token from header (Format: Bearer <token>)
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
+  // 1. Get token from cookies
+  const token = req.cookies?.token;
 
   if (!token) {
     return res.status(401).json({ message: "No token, authorization denied" });

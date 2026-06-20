@@ -1,50 +1,25 @@
-import { Request, Response } from 'express';
-import { Readable } from 'stream';
-import { getOrpheusAudioStream } from '../services/tts.service.js';
+import { Request, Response, NextFunction } from 'express';
+import { getOrpheusAudioBuffer } from '../services/tts.service.js';
 import { generateInterviewReport } from '../services/report.service.js';
 import User from '../models/User.js';
 import { AuthRequest } from '../middleware/auth.middleware.js';
-import Groq from "groq-sdk";
+import { generateGroqResponse } from '../services/groq.service.js';
 
-export const chatWithAI = async (req: Request, res: Response) => {
+export const chatWithAI = async (req: Request, res: Response, next: NextFunction) => {
   const { userMessage, history } = req.body;
-  
-  // Need to ensure groq is initialized correctly
-  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY!});
 
   try {
-    const completion = await groq.chat.completions.create({
-      messages: [
-        { role: "system", content: `You are a Senior Technical Interviewer at a top-tier tech firm. 
-        Your goal is to assess the candidate's deep technical knowledge, problem-solving ability, and architectural thinking.
-        
-        GUIDELINES:
-        1. Professional & Challenging: Be polite but rigorous. If the candidate gives a surface-level answer, ask for more depth.
-        2. One Question at a Time: Never overwhelm the user. Ask one clear, targeted question.
-        3. Adaptive: If they mention a specific technology (like React or Node.js), dive deeper into that specific area.
-        4. Brief: Keep your responses concise (under 2-3 sentences) to maintain the flow of a real-life conversation.
-        5. Contextual: Use the provided conversation history to avoid repeating questions and to build upon previous answers.` },
-        ...history,
-        { role: "user", content: userMessage }
-      ],
-      model: "llama-3.3-70b-versatile",
+    const aiText = await generateGroqResponse(userMessage, history);
+    const audioBuffer = await getOrpheusAudioBuffer(aiText, 'hannah');
+
+    if (!audioBuffer) throw new Error("Audio buffer failed");
+
+    res.json({
+      text: aiText,
+      audioBase64: audioBuffer.toString('base64')
     });
-
-    const aiText = completion.choices[0].message.content || "";
-    const audioStream = await getOrpheusAudioStream(aiText, 'hannah');
-
-    if (!audioStream) throw new Error("Audio stream failed");
-
-    res.set({
-      'Content-Type': 'audio/wav',
-      'X-AI-Text': encodeURIComponent(aiText),
-      'Transfer-Encoding': 'chunked'
-    });
-
-    Readable.fromWeb(audioStream as any).pipe(res);
   } catch (error) {
-    console.error("Chat Error:", error);
-    res.status(500).json({ error: "AI Chat failed" });
+    next(error);
   }
 };
 
