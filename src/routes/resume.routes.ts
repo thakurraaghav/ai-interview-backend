@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import multer from 'multer';
-import { protect } from '../middleware/auth.middleware.js';
+import { protect, AuthRequest } from '../middleware/auth.middleware.js';
 import { handleResumeAnalysis } from '../controllers/resume.controller.js';
 import User from '../models/User.js';
 
@@ -19,16 +19,16 @@ const upload = multer({
       cb(null, true);
     } else {
       // Pass an error if it's neither
-      cb(new Error("Only PDFs are allowed") as any, false);
+      cb(new Error("Only PDFs are allowed"));
     }
   }
 });
 
 // POST /api/resume/analyze
 router.post('/analyze', protect, upload.single('resume'), handleResumeAnalysis);
-router.get('/history', protect, async (req: any, res) => {
+router.get('/history', protect, async (req: AuthRequest, res: Response): Promise<any> => {
   try{
-    const user = await User.findById(req.user.id).select('resumes');
+    const user = await User.findById(req.user?.id).select('resumes');
     res.json(user?.resumes || []);
   } catch(error){
     res.status(500).json({error: 'Failed to fetch history'});

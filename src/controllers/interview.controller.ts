@@ -48,7 +48,7 @@ export const chatWithAI = async (req: Request, res: Response) => {
   }
 };
 
-export const generateReport = async (req: AuthRequest, res: Response): Promise<any> => {
+export const generateReport = async (req: AuthRequest, res: Response): Promise<void | Response> => {
   const { history, role } = req.body;
   const userId = req.user?.id;
 
@@ -69,7 +69,7 @@ export const generateReport = async (req: AuthRequest, res: Response): Promise<a
   }
 };
 
-export const deleteSession = async (req: AuthRequest, res: Response): Promise<any> => {
+export const deleteSession = async (req: AuthRequest, res: Response): Promise<void | Response> => {
   try {
     const userId = req.user?.id;
     const interviewId = req.params.id; // This comes from the URL
