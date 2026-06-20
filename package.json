@@ -22,11 +22,9 @@
     "groq-sdk": "^1.1.2",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
-    "mongodb": "^7.2.0",
     "mongoose": "^9.6.2",
     "morgan": "^1.10.1",
     "multer": "^2.1.1",
-    "ollama": "^0.6.3",
     "pdf-parse": "^1.1.1"
   },
   "devDependencies": {
@@ -39,8 +37,6 @@
     "@types/multer": "^2.1.0",
     "@types/node": "^25.6.0",
     "@types/pdf-parse": "^1.1.5",
-    "cross-env": "^10.1.0",
-    "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3"
   }
