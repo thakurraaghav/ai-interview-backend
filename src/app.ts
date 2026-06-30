@@ -38,7 +38,9 @@ app.use(cors({
     origin: [
         'https://recruitaifrontend.netlify.app', 
         'http://localhost:5173',               
-        'http://localhost:3000'
+        'http://localhost:3000',
+        'https://ai-interview-frontend-two.vercel.app',
+        /\.vercel\.app$/
     ], 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-AI-Text'], 
