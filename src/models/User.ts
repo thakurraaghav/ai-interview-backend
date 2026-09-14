@@ -1,5 +1,14 @@
 import mongoose from 'mongoose';
 
+const toJSONOptions = {
+  virtuals: true,
+  transform: (doc: any, ret: any) => {
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+  }
+};
+
 // 1. Define the internal structure of an interview
 const InterviewSchema = new mongoose.Schema({
   id: { type: String, required: true },
@@ -19,7 +28,7 @@ const InterviewSchema = new mongoose.Schema({
     conciseness: Number
   },
   date: { type: Date, default: Date.now }
-});
+}, { toJSON: toJSONOptions, toObject: toJSONOptions });
 
 
 const resumeSchema = new mongoose.Schema({
@@ -29,7 +38,7 @@ const resumeSchema = new mongoose.Schema({
   role: { type: String, required: true },
   fileName: { type: String, required: true },
   date: { type: Date, default: Date.now }
-});
+}, { toJSON: toJSONOptions, toObject: toJSONOptions });
 
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -37,6 +46,6 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   interviews: [InterviewSchema],
   resumes: { type: [resumeSchema], default: [] }
-});
+}, { toJSON: toJSONOptions, toObject: toJSONOptions });
 
 export default mongoose.model('User', UserSchema);

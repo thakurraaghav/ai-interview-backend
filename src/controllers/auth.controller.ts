@@ -26,7 +26,7 @@ export const register = async (req: Request, res: Response) => {
         const newUser = await User.create({name, email, password: hashedPassword});
         
         //4. Create a JWT Token (The Entry Pass)
-        const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET!, {expiresIn: '7d'});
+        const token = jwt.sign({id: newUser.id}, process.env.JWT_SECRET!, {expiresIn: '7d'});
 
         res.cookie('token', token, getCookieOptions());
         res.status(201).json({user: {name: newUser.name, email: newUser.email}});
@@ -45,7 +45,7 @@ export const login = async(req: Request, res: Response) => {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if(!isPasswordCorrect) return res.status(400).json({message: "Invalid credentails"});
 
-        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET!, {expiresIn: '7d'})
+        const token = jwt.sign({id: user.id}, process.env.JWT_SECRET!, {expiresIn: '7d'})
         res.cookie('token', token, getCookieOptions());
         res.status(200).json({user: {name: user.name, email: user.email}});
     } catch (error) {
