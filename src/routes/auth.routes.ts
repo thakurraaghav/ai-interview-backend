@@ -1,5 +1,5 @@
 import { Router, Response } from 'express';
-import { login, register } from '../controllers/auth.controller.js'
+import { login, register, status, logout } from '../controllers/auth.controller.js'
 import User from '../models/User.js';
 import { protect, AuthRequest } from '../middleware/auth.middleware.js';
 
@@ -7,8 +7,10 @@ const router = Router();
 
 router.post('/register', register);
 router.post('/login', login);
+router.get('/status', protect, status);
+router.post('/logout', logout);
 
-// 💡 ADD THIS: The route to get user data for the Dashboard
+//ADD THIS: The route to get user data for the Dashboard
 router.get('/profile', protect, async (req: AuthRequest, res: Response): Promise<any> => {
   try {
     // req.user.id comes from the middleware we just wrote

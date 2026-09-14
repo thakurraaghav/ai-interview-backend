@@ -9,9 +9,9 @@ const InterviewSchema = new mongoose.Schema({
   transcript: [{
     role: String, // 'user' or 'assistant'
     content: String,
-    critique: String // 💡 This is where the AI will put its "inline comment"
+    critique: String // This is where the AI will put its "inline comment"
   }],
-  skills: { // 👈 Ensure this is here
+  skills: { //Ensure this is here
     technical: Number,
     communication: Number,
     logic: Number,
@@ -23,20 +23,20 @@ const InterviewSchema = new mongoose.Schema({
 
 
 const resumeSchema = new mongoose.Schema({
-  id: {type: String, required: true},
-  score: {type: Number, required: true},
-  feedback: {type: String, required: true},
-  role: {type: String, required: true},
-  fileName: {type: String, required: true},
-  date: {type: Date, default: Date.now}
+  id: { type: String, required: true },
+  score: { type: Number, required: true },
+  feedback: { type: String, required: true },
+  role: { type: String, required: true },
+  fileName: { type: String, required: true },
+  date: { type: Date, default: Date.now }
 });
 
 const UserSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    interviews: [InterviewSchema],
-    resumes: { type: [resumeSchema], default: [] }
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  interviews: [InterviewSchema],
+  resumes: { type: [resumeSchema], default: [] }
 });
 
 export default mongoose.model('User', UserSchema);
