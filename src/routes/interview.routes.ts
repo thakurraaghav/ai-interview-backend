@@ -4,14 +4,10 @@ import { chatWithAI, generateReport, deleteSession } from '../controllers/interv
 
 const router = Router();
 
-router.post('/chat', chatWithAI);
+router.post('/chat', protect, chatWithAI);
 
 router.post('/report', protect, generateReport);
 
-/**
- * @route   DELETE /api/interview/:id
- * @desc    Remove a specific interview session
- */
 router.delete('/:id', protect, deleteSession);
 
 export default router;

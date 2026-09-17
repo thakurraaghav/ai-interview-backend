@@ -14,10 +14,7 @@ export const chatWithAI = async (req: Request, res: Response, next: NextFunction
 
     if (!audioBuffer) throw new Error("Audio buffer failed");
 
-    res.json({
-      text: aiText,
-      audioBase64: audioBuffer.toString('base64')
-    });
+    res.json({ text: aiText, audioBase64: audioBuffer.toString('base64') });
   } catch (error) {
     next(error);
   }
@@ -27,16 +24,16 @@ export const generateReport = async (req: AuthRequest, res: Response): Promise<v
   const { history, role } = req.body;
   const userId = req.user?.id;
 
-  // 💡 Security check: Don't waste AI tokens or DB space on empty sessions
+  //Security check: Don't waste AI tokens or DB space on empty sessions
   if (!history || history.length < 3) {
-    return res.status(400).json({ 
-      error: "Session too short. No analysis generated." 
+    return res.status(400).json({
+      error: "Session too short. No analysis generated."
     });
   }
 
   try {
     const report = await generateInterviewReport(history, role);
-    const reportWithMetadata = { ...report, transcript: report.transcript, role: role,  date: new Date(), id: Date.now().toString() };
+    const reportWithMetadata = { ...report, transcript: report.transcript, role: role, date: new Date(), id: Date.now().toString() };
     await User.findByIdAndUpdate(userId, { $push: { interviews: reportWithMetadata } });
     res.json(report);
   } catch (error) {
@@ -52,7 +49,7 @@ export const deleteSession = async (req: AuthRequest, res: Response): Promise<vo
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
-        // 💡 This tells Mongo: "Look inside interviews and remove the one where id matches"
+        //This tells Mongo: "Look inside interviews and remove the one where id matches"
         $pull: { interviews: { id: interviewId } }
       },
       { new: true } // Return the updated user so we can verify it worked

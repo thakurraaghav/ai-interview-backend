@@ -1,13 +1,11 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import Groq from 'groq-sdk';
-import { Readable } from 'stream';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-/**
- * Returns a live stream of audio data from Orpheus
- */
+//Generates WAV audio from text using Groq's Orpheus TTS model.
+
 export const getOrpheusAudioBuffer = async (text: string, voice: string = 'hannah'): Promise<Buffer> => {
   try {
     const response = await groq.audio.speech.create({
@@ -18,9 +16,9 @@ export const getOrpheusAudioBuffer = async (text: string, voice: string = 'hanna
     });
 
     const arrayBuffer = await response.arrayBuffer();
-    return Buffer.from(arrayBuffer); 
+    return Buffer.from(arrayBuffer);
   } catch (error) {
-    console.error("TTS Stream Error:", error);
+    console.error("TTS Error:", error);
     throw error;
   }
 };

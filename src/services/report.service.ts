@@ -48,7 +48,7 @@ export const generateInterviewReport = async (history: { role: string; content: 
         }
       ],
       model: "llama-3.3-70b-versatile",
-      // 💡 This is the secret sauce: forcing the AI to speak in JSON
+      //This is forcing the AI to speak in JSON
       response_format: { type: "json_object" }, // Ensures Groq returns valid JSON
       temperature: 0.2, // Low temperature for consistent grading
     });

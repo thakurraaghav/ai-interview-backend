@@ -7,7 +7,7 @@ import User from '../models/User.js';
 const router = Router();
 
 // Configure multer for memory storage (no files saved to disk)
-const upload = multer({ 
+const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
   fileFilter: (req, file, cb) => {
@@ -24,14 +24,13 @@ const upload = multer({
   }
 });
 
-// POST /api/resume/analyze
 router.post('/analyze', protect, upload.single('resume'), handleResumeAnalysis);
 router.get('/history', protect, async (req: AuthRequest, res: Response): Promise<any> => {
-  try{
+  try {
     const user = await User.findById(req.user?.id).select('resumes');
     res.json(user?.resumes || []);
-  } catch(error){
-    res.status(500).json({error: 'Failed to fetch history'});
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch history' });
   }
 });
 

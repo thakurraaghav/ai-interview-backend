@@ -5,14 +5,12 @@ dotenv.config();
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-export const generateGroqResponse = async (
-  userMessage: string, 
-  history: any[]
-): Promise<string> => {
+export const generateGroqResponse = async (userMessage: string, history: any[]): Promise<string> => {
   try {
     const completion = await groq.chat.completions.create({
       messages: [
-        { role: "system", content: `You are a Senior Technical Interviewer at a top-tier tech firm. 
+        {
+          role: "system", content: `You are a Senior Technical Interviewer at a top-tier tech firm. 
         Your goal is to assess the candidate's deep technical knowledge, problem-solving ability, and architectural thinking.
         
         GUIDELINES:
