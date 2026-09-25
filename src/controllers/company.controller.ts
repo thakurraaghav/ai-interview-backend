@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as companyService from '../services/company.service.js';
+import { getCompanyIntel } from '../services/company.service.js';
 
 export const getCompanyPrepData = async (req: Request, res: Response) => {
   try {
@@ -9,10 +9,8 @@ export const getCompanyPrepData = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Missing companyName or role parameters." });
     }
 
-    // Call your service layer logic
-    const intel = await companyService.getCompanyIntel(companyName, role);
+    const intel = await getCompanyIntel(companyName, role);
 
-    // Return the JSON directly back to your frontend fetch call
     return res.status(200).json(intel);
   } catch (error: any) {
     console.error("Company Prep Controller Error:", error);

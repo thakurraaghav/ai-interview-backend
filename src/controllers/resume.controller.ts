@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../middleware/auth.middleware.js";
-import * as resumeService from '../services/resume.service.js';
+import { analyzeResumeContent } from '../services/resume.service.js';
 import User from "../models/User.js";
 
 export const handleResumeAnalysis = async (req: AuthRequest, res: Response) => {
@@ -13,7 +13,7 @@ export const handleResumeAnalysis = async (req: AuthRequest, res: Response) => {
         const userId = req.user?.id; // from protect middleware
 
         // 1. Get AI Analysis
-        const analysis = await resumeService.analyzeResumeContent(req.file.buffer, role);
+        const analysis = await analyzeResumeContent(req.file.buffer, role);
 
         // 2. Prepare metadata for history
         const resumeEntry = {
