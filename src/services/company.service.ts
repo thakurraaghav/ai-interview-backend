@@ -23,12 +23,12 @@ export const getCompanyIntel = async (companyName: string, role: string) => {
       { role: "system", content: systemPrompt },
       { role: "user", content: userPrompt }
     ],
-    model: "llama-3.3-70b-versatile", // Or whichever model you are using across your app
+    model: "openai/gpt-oss-120b", // Or whichever model you are using across your app
     temperature: 0.3, // Low temperature keeps the JSON structure strictly formatted
   });
 
   const responseText = completion.choices[0]?.message?.content || "{}";
-  
+
   // Parse the raw text string from Groq into an actual JavaScript Object
   return JSON.parse(responseText);
 };

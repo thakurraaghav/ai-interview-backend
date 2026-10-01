@@ -47,7 +47,7 @@ export const generateInterviewReport = async (history: { role: string; content: 
           content: `Analyze my performance and generate the report for this transcript: ${JSON.stringify(history)}`
         }
       ],
-      model: "llama-3.3-70b-versatile",
+      model: "openai/gpt-oss-120b",
       //This is forcing the AI to speak in JSON
       response_format: { type: "json_object" }, // Ensures Groq returns valid JSON
       temperature: 0.2, // Low temperature for consistent grading

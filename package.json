@@ -2,7 +2,7 @@
   "name": "ai-interview-backend2",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
     "start": "node dist/app.js",
     "dev": "tsx watch src/app.ts",

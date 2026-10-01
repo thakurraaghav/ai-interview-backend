@@ -9,7 +9,7 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 export const analyzeResumeContent = async (fileBuffer: Buffer, role: string) => {
   try {
     // This will now work without the "not callable" error
-    const data = await pdf(fileBuffer); 
+    const data = await pdf(fileBuffer);
     const resumeText = data.text;
 
     const completion = await groq.chat.completions.create({
@@ -21,7 +21,7 @@ export const analyzeResumeContent = async (fileBuffer: Buffer, role: string) => 
         },
         { role: "user", content: `Resume text: ${resumeText}` }
       ],
-      model: "llama-3.3-70b-versatile",
+      model: "openai/gpt-oss-120b",
       response_format: { type: "json_object" },
     });
 
